@@ -1,0 +1,4 @@
+db.messages.find()
+show collections
+use chat
+show dbs

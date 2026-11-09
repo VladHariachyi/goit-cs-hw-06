@@ -1,0 +1,25 @@
+services:
+  mongodb:
+    image: mongo:8
+    container_name: mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_DB_USER_NAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_DB_USER_PASS}
+    volumes:
+      - ./storage:/data/db
+
+  app:
+    build: .
+    container_name: chat
+    ports:
+      - "3000:3000"
+      - "5055:5055"
+    environment:
+      MONGO_DB_USER_NAME: ${MONGO_DB_USER_NAME}
+      MONGO_DB_USER_PASS: ${MONGO_DB_USER_PASS}
+    restart: unless-stopped
+    depends_on:
+      - mongodb
