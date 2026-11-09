@@ -6,6 +6,7 @@ import socket
 from socket_server.server import TCP_IP, TCP_PORT
 import json
 import uvicorn
+from threading import Event
 
 app = FastAPI()
 FRONTEND_DIR = Path("frontend")
@@ -79,7 +80,11 @@ app.mount(
     name="frontend"
 )
 
-def run():
+def run(socket_server_ready_event: Event):
+    socket_server_ready_event.wait()
+
+    print("HTTP: Waited for Socket server, start HTTP server")
+
     uvicorn.run(
         "http_server.server:app",
         host="0.0.0.0",

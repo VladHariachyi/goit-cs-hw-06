@@ -1,19 +1,22 @@
 import socket
 from db.connection import DB, UserMessage
 import json
+from threading import Event
 
 TCP_IP = '0.0.0.0'
 TCP_PORT = 5055
 
 db = DB()
 
-def run(ip, port):
+def run(ip, port, ready_event: Event):
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.bind((ip, port))
     server.listen(1)
-    conn, _ = server.accept()
-
+    ready_event.set()
     print("Socket server is started")
+
+    
+    conn, _ = server.accept()
 
     try:
         with conn:

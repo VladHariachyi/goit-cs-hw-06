@@ -4,16 +4,19 @@ import threading
 
 
 if __name__ == "__main__":
-    # TCP Server
+    socket_server_ready_event = threading.Event()
+
+    # Socket TCP Server
     tcp_thread = threading.Thread(
         target=run_socket,
-        args=(TCP_IP, TCP_PORT),
+        args=(TCP_IP, TCP_PORT, socket_server_ready_event),
         daemon=True
     )
 
     # HTTP Server
     http_thread = threading.Thread(
         target=run_http,
+        args=(socket_server_ready_event,),
         daemon=True
     )
 
